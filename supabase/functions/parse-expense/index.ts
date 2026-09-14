@@ -3,6 +3,7 @@ import "@supabase/functions-js/edge-runtime.d.ts";
 import { withSupabase } from "@supabase/server";
 import {
   callGemini,
+  describeError,
   jsonResponse,
   readJson,
   requireApiKey,
@@ -80,7 +81,7 @@ export default {
       return jsonResponse({ items: cleaned });
     } catch (error) {
       console.error(error);
-      return jsonResponse({ error: "Gemini tidak dapat dihubungi" }, 502);
+      return jsonResponse({ error: "Gemini gagal: " + describeError(error) }, 502);
     }
   }),
 };

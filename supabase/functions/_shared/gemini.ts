@@ -4,9 +4,14 @@
  * sehingga alamat model, cara kirim gambar, dan penanganan error ada di satu tempat.
  */
 
-const MODEL = "gemini-2.5-flash";
-const GEMINI_URL =
-  `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
+// Nama model bisa diganti lewat secret GEMINI_MODEL tanpa deploy ulang:
+//   npx supabase secrets set GEMINI_MODEL=nama-model
+const DEFAULT_MODEL = "gemini-3.5-flash-lite";
+
+function geminiUrl(): string {
+  const model = Deno.env.get("GEMINI_MODEL")?.trim() || DEFAULT_MODEL;
+  return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+}
 
 export type GeminiSchema = Record<string, unknown>;
 
@@ -34,7 +39,7 @@ export async function callGemini<T>(options: CallOptions): Promise<T> {
     });
   }
 
-  const response = await fetch(GEMINI_URL, {
+  const response = await fetch(geminiUrl(), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -92,6 +97,16 @@ export function sanitizeCategories(input: unknown): string[] {
     .filter((item) => item !== "" && item.length <= MAX_CATEGORY_LENGTH)
     .slice(0, MAX_CATEGORIES);
   return cleaned.length > 0 ? cleaned : FALLBACK_CATEGORIES;
+}
+
+/**
+ * Mengubah error menjadi kalimat pendek yang aman ditampilkan ke pengguna
+ * (dipotong 240 karakter, tanpa nilai yang menyerupai API key).
+ */
+export function describeError(error: unknown): string {
+  const raw = error instanceof Error ? error.message : String(error);
+  const safe = raw.replace(/AIza[0-9A-Za-z_-]{20,}/g, "[key]").replace(/\s+/g, " ").trim();
+  return safe.length > 240 ? safe.slice(0, 240) + "…" : safe;
 }
 
 /** Balasan JSON dengan kode status. CORS ditangani oleh withSupabase. */

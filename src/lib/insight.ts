@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { readFunctionError } from './receipt'
 import { fetchMonthExpenses } from './expenses'
 import { computeMonthStats } from './stats'
 import type { MonthStats } from './stats'
@@ -94,7 +95,8 @@ export async function generateInsight(
   )
 
   if (error || !data?.headline) {
-    return { ok: false, message: 'Ringkasan tidak dapat dibuat sekarang. Coba lagi nanti.' }
+    const detail = await readFunctionError(error)
+    return { ok: false, message: detail ?? 'Ringkasan tidak dapat dibuat sekarang. Coba lagi nanti.' }
   }
 
   const insight: Insight = { headline: data.headline, highlights: data.highlights ?? [] }

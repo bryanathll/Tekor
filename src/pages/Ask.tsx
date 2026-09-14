@@ -105,7 +105,7 @@ export default function Ask() {
       {result?.ok && answer && (
         <div className="mt-5">
           <div className="rounded-xl border border-line bg-surface px-4 py-4">
-            <p className="text-2xl font-bold text-ink tabular-nums">{answer.headline}</p>
+            <p className="text-lg font-bold text-ink tabular-nums">{answer.headline}</p>
             <p className="mt-1 text-xs text-muted">{answer.detail}</p>
           </div>
 

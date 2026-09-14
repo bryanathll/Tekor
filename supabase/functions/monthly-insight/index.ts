@@ -1,6 +1,12 @@
 import "@supabase/functions-js/edge-runtime.d.ts";
 import { withSupabase } from "@supabase/server";
-import { callGemini, jsonResponse, readJson, requireApiKey } from "../_shared/gemini.ts";
+import {
+  callGemini,
+  describeError,
+  jsonResponse,
+  readJson,
+  requireApiKey,
+} from "../_shared/gemini.ts";
 
 /**
  * Menerima ANGKA AGREGAT saja (bukan transaksi satu per satu), lalu meminta Gemini
@@ -90,7 +96,7 @@ export default {
       });
     } catch (error) {
       console.error(error);
-      return jsonResponse({ error: "Gemini tidak dapat dihubungi" }, 502);
+      return jsonResponse({ error: "Gemini gagal: " + describeError(error) }, 502);
     }
   }),
 };
