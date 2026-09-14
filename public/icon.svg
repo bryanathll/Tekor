@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Ikon Duit Kabur: kotak merah membulat dengan lembaran uang, sama seperti logo di halaman login -->
+  <rect width="512" height="512" rx="112" fill="#b21b1e"/>
+  <g fill="none" stroke="#ffffff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="86" y="166" width="340" height="180" rx="40"/>
+    <circle cx="256" cy="256" r="44"/>
+    <path d="M150 256h.5M362 256h.5"/>
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+/*
+  Tema aplikasi.
+  Setiap --color-* di sini otomatis menjadi kelas Tailwind:
+  bg-primary, text-primary, border-line, bg-cream, dst.
+*/
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: #b21b1e;      /* merah utama */
+  --color-primary-dark: #8e1416; /* merah untuk hover/tekan */
+  --color-cream: #e6e0d4;        /* latar halaman */
+  --color-surface: #ffffff;      /* latar kartu & input */
+  --color-line: #d5cdbd;         /* garis tepi lembut, turunan dari cream */
+  --color-ink: #1f1a15;          /* teks utama, coklat sangat gelap */
+  --color-muted: #7a7266;        /* teks sekunder */
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
