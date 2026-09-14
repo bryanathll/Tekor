@@ -121,12 +121,12 @@ export default function Home() {
 
         <div className="relative">
           <p className="text-sm text-white/80">Halo, {greetingByHour()}</p>
-          <h1 className="mt-0.5 text-2xl font-semibold">{USER_NAME}</h1>
+          <h1 className="mt-0.5 text-lg font-semibold">{USER_NAME}</h1>
         </div>
 
         <div className="relative mt-6 border-t border-white/15 pt-4">
           <p className="text-xs tracking-wide text-white/70 uppercase">Pengeluaran hari ini</p>
-          <p className="mt-1 text-3xl font-bold tabular-nums">{formatRupiah(data.todayTotal)}</p>
+          <p className="mt-1 text-2xl font-bold tabular-nums">{formatRupiah(data.todayTotal)}</p>
         </div>
       </section>
 
