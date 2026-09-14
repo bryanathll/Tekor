@@ -12,8 +12,6 @@ export type Insight = {
   highlights: string[]
 }
 
-type CachedInsight = Insight & { signature: string }
-
 /**
  * Menyusun ANGKA AGREGAT yang dikirim ke Gemini. Tidak ada transaksi satu per satu,
  * kecuali satu transaksi terbesar (jumlah, kategori, catatan) sebagai sorotan.
@@ -62,25 +60,9 @@ function buildPayload(month: MonthKey, rows: Expense[], stats: MonthStats, previ
   }
 }
 
-function cacheKey(month: MonthKey): string {
-  return `tekor:insight:${month.year}-${String(month.month).padStart(2, '0')}`
-}
-
-/** Ringkasan tersimpan dipakai ulang selama data bulan itu belum berubah (tanda: total dan jumlah). */
-export function readCachedInsight(month: MonthKey, stats: MonthStats): Insight | null {
-  try {
-    const raw = localStorage.getItem(cacheKey(month))
-    if (!raw) return null
-    const cached = JSON.parse(raw) as CachedInsight
-    return cached.signature === `${stats.total}:${stats.count}` ? cached : null
-  } catch {
-    return null
-  }
-}
-
 export type InsightResult = { ok: true; insight: Insight } | { ok: false; message: string }
 
-/** Meminta ringkasan ke Edge Function `monthly-insight`, lalu menyimpannya di perangkat. */
+/** Meminta ringkasan ke Edge Function `monthly-insight`. Tidak disimpan; dibuat ulang tiap kali diminta. */
 export async function generateInsight(
   month: MonthKey,
   rows: Expense[],
@@ -99,14 +81,5 @@ export async function generateInsight(
     return { ok: false, message: detail ?? 'Ringkasan tidak dapat dibuat sekarang. Coba lagi nanti.' }
   }
 
-  const insight: Insight = { headline: data.headline, highlights: data.highlights ?? [] }
-
-  try {
-    const cached: CachedInsight = { ...insight, signature: `${stats.total}:${stats.count}` }
-    localStorage.setItem(cacheKey(month), JSON.stringify(cached))
-  } catch {
-    // Penyimpanan lokal tidak tersedia; ringkasan tetap ditampilkan.
-  }
-
-  return { ok: true, insight }
+  return { ok: true, insight: { headline: data.headline, highlights: data.highlights ?? [] } }
 }
