@@ -218,11 +218,11 @@ export default function ReceiptScanner({ categories, onSaved }: Props) {
 
   return (
     <>
+      {/* Tanpa atribut capture: Android menawarkan Kamera atau Galeri/File, bukan langsung kamera. */}
       <input
         ref={fileInput}
         type="file"
-        accept="image/*"
-        capture="environment"
+        accept="image/jpeg,image/png,image/webp"
         onChange={handleFile}
         className="hidden"
       />
@@ -231,8 +231,8 @@ export default function ReceiptScanner({ categories, onSaved }: Props) {
         type="button"
         onClick={() => fileInput.current?.click()}
         disabled={scanning}
-        aria-label="Scan struk"
-        title="Scan struk"
+        aria-label="Scan struk dari kamera atau galeri"
+        title="Scan struk dari kamera atau galeri"
         className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-primary transition hover:border-primary/40 active:scale-95 disabled:opacity-50"
       >
         {scanning ? (
